@@ -67,7 +67,7 @@ export default {
       // 写法三
       // 解决params可传可不传的问题
       // ①配置路由路径的params(最后面加问号)：path: '/search/:keyword?'
-      // ②对keyword先进行判断，如果keyword为空则不进行参数配置
+      // ②对keyword先进行判断，如果keyword为空则不进行参数配置，仍访问Search原页面
       const { keyword } = this;
       const location = {
         name: "search"
@@ -77,12 +77,12 @@ export default {
         location.query = { keyword2: keyword.toUpperCase() };
       }
       // 这其中还有另外一个问题：如果跳转到此路由且参数数据不变时，会报错（重复跳转路由）
-      // 原因: vue-router3.1.0之后, 引入了push()的promise的语法, 如果没有通过参数指定回调函数就返回一个promise来指定成功/失败的回调, 且内部会判断如果要跳转的路径和参数都没有变化, 会抛出一个失败的promise
+      // 原因: vue-router3.1.0之后, 引入了push()的promise的语法, 如果没有通过参数指定回调函数就返回一个promise来指定成功/失败的回调, 且内部会判断是否要跳转的路径和参数都没有变化, 会抛出一个失败的promise
       // this.$router.push(location);
       // 解决办法一：在每次push时指定回调函数或catch错误
       // this.$router.push(location, ()=>{});
       // this.$router.push(location).catch(()=>{});
-      // 解决办法二：修正Vue原型上的push和replace方法
+      // 解决办法二：修改Vue原型上的push和replace方法
 
 
 
