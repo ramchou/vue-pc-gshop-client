@@ -1,6 +1,6 @@
 module.exports = {
-    // linkOnSave: false,
-    linkOnSave:'warning', 
+    // lintOnSave: false,
+    lintOnSave:'warning', 
 
     devServer: {
         proxy: {

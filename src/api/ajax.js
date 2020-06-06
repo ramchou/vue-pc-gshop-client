@@ -1,24 +1,23 @@
 import axios from 'axios'
 import NProgress  from 'nprogress'
-// import { Promise } from 'core-js'
 
 // 1.配置通用的基础路径和超时
 // instance 是一个与axios功能类似的ajax请求函数，不是一个实例对象
 const instance = axios.create({
-    baseURL: '/api', // 设置了代理就直接设置'/api'即可
+    baseURL: '/api', // 设置了代理就直接设置'/api'即可，会自动处理请求
     // baseURL: 'http://182.92.128.115/api', //不设置代理时需要这样设置baseurl 
     timeout: 15000
 })
 
 // 2.显示/隐藏进度条
 // 注册请求拦截器
-// 在请求拦截器的回调中执行：Nprogress.start()
+// 在请求拦截器的回调中执行：NProgress.start()
 axios.interceptors.request.use(config => { 
     NProgress.start()
     return config
 })
 // 注册响应拦截器
-// 在请求完成后的成功/失败回调中执行：Nprogress.done()
+// 在请求完成后的成功/失败回调中执行：NProgress.done()
 axios.interceptors.response.use(
     response => { // 请求成功的回调
         NProgress.done()
