@@ -11,22 +11,14 @@
 <script>
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import {reqCategories} from './api'
+// import { reqCategories } from "./api";
+
 export default {
   name: "App",
   // 局部注册（只有当前组件可用）
   components: {
     Header,
     Footer
-  },
-
-  // created () {
-    
-  // },
-  async mounted () {
-    // 测试
-    const result = await reqCategories()
-    console.log('result', result);
   }
 };
 </script>
