@@ -11,7 +11,12 @@ export default [
     {
         name: "search",
         path: '/search/:keyword?',
-        component: Search
+        component: Search,
+        // 将路由参数映射成props传递给路由组件对象
+        props: route => ({
+            keyword3: route.params.keyword,
+            keyword4: route.query.keyword2
+        })
     },
     {
         path: '/register',

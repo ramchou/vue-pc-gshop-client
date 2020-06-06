@@ -26,7 +26,8 @@
     <!--头部第二行 搜索区域-->
     <div class="bottom">
       <h1 class="logoArea">
-        <router-link to="/" class="logo" title="尚品汇" href="###" target="_blank">
+        <!-- <router-link to="/" class="logo" title="尚品汇" href="###" target="_blank"> -->
+        <router-link to="/">
           <img src="./images/logo.png" alt />
         </router-link>
       </h1>
@@ -78,7 +79,8 @@ export default {
       }
       // 这其中还有另外一个问题：如果跳转到此路由且参数数据不变时，会报错（重复跳转路由）
       // 原因: vue-router3.1.0之后, 引入了push()的promise的语法, 如果没有通过参数指定回调函数就返回一个promise来指定成功/失败的回调, 且内部会判断是否要跳转的路径和参数都没有变化, 会抛出一个失败的promise
-      // this.$router.push(location);
+      this.$router.push(location);
+      
       // 解决办法一：在每次push时指定回调函数或catch错误
       // this.$router.push(location, ()=>{});
       // this.$router.push(location).catch(()=>{});
