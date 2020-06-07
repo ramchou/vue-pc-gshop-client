@@ -18,7 +18,7 @@ export default {
         async getCategoryList({ commit }) {
             // 调用接口请求函数发异步ajax请求
             const result = await reqCategories()
-            console.log(result);
+            // console.log(result);
             
             // 请求成功后，取出响应数据提交给mutations保存，保存到state中去
             if (result.code === 200) {
