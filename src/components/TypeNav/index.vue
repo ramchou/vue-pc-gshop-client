@@ -4,6 +4,7 @@
     <div class="container">
       <div @mouseleave="hideSubCategories" @mouseenter="showCategories">
         <h2 class="all">全部商品分类</h2>
+        <!-- 用transition给一级列表添加显示时的过渡效果，注意要同时更改less文件对应的部分 -->
         <transition name="move">
           <div class="sort" v-show="isShowFirst">
             <div class="all-sort-list2" @click="toSearch">
@@ -99,6 +100,7 @@ export default {
 
     ...mapState({
       // 右边是一个回调函数，回调函数接收总state作为参数，返回值作为计算属性的值
+      // 通过vuex获取当前组件的数据时注意层次结构：总/分
       categoryList: state => state.home.categoryList
     })
   },
@@ -117,15 +119,18 @@ export default {
       }
     }, 200),
 
+    // 隐藏详情列表
     hideSubCategories() {
       this.currentIndex = -2;
+      // 非首页则隐藏一级列表（Search页面）
       if (this.$route.path !== "/") {
         this.isShowFirst = false;
       }
     },
+    // 展示一级列表
     showCategories() {
-      this.currentIndex = -1;
-      this.isShowFirst = true;
+      this.currentIndex = -1; // 鼠标尚未进入一级列表区域则不更新列表数据
+      this.isShowFirst = true; // 鼠标位于“全部商品分类”上+位于一级列表之上时，显示一级列表
     },
 
     toSearch(event) {
@@ -200,11 +205,12 @@ export default {
       background: #fafafa;
       z-index: 999;
       // 指定显示过程的transtion
-      &.move-enter-active{
+      &.move-enter-active {
         transition: all 0.3s;
       }
       // 指定隐藏时的样式
-      &.move-enter, &.move-leave-to{
+      &.move-enter,
+      &.move-leave-to {
         opacity: 0;
         height: 0;
       }
