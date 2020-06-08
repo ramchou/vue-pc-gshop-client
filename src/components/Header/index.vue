@@ -74,21 +74,20 @@ export default {
         name: "search"
       };
       if (keyword) {
-        location.params = { keyword },
-        location.query = { keyword2: keyword.toUpperCase() };
+        location.params = { keyword };
       }
+      // 获取当前路由地址中的query参数对象
+      const { query } = this.$route;
+      location.query = query;
+
       // 这其中还有另外一个问题：如果跳转到此路由且参数数据不变时，会报错（重复跳转路由）
       // 原因: vue-router3.1.0之后, 引入了push()的promise的语法, 如果没有通过参数指定回调函数就返回一个promise来指定成功/失败的回调, 且内部会判断是否要跳转的路径和参数都没有变化, 会抛出一个失败的promise
       this.$router.push(location);
-      
+
       // 解决办法一：在每次push时指定回调函数或catch错误
       // this.$router.push(location, ()=>{});
       // this.$router.push(location).catch(()=>{});
       // 解决办法二：修改Vue原型上的push和replace方法
-
-
-
-
     }
   }
 };

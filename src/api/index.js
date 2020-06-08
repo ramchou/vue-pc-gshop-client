@@ -3,6 +3,7 @@
 // 根据接口文档，定义接口请求
 
 import ajax from './ajax'
+import mockAjax from './mockAjax'
 
 // 定义登录接口
 export function reqLogin(mobile, password) {
@@ -20,3 +21,7 @@ export function reqLogin(mobile, password) {
 
 // 定义首页三级分类
 export const reqCategories = () => ajax('/product/getBaseCategoryList')
+
+// 定义访问mock接口的接口请求函数
+export const reqBanners = () => mockAjax('/banners')
+export const reqFloors = () => mockAjax('/floors')

@@ -105,13 +105,13 @@ export default {
     })
   },
 
-  mounted() {
-    // 通过store对象的dispatch()触发异步action getCategoryList执行获取数据
-    // this.$store.dispatch("getCategoryList"); // 数据从接口转移到vuex的state中
-    this.getCategoryList();
-  },
+  // mounted() {
+  // 通过store对象的dispatch()触发异步action getCategoryList执行获取数据
+  // this.$store.dispatch("getCategoryList"); // 数据从接口转移到vuex的state中
+  //   this.getCategoryList();
+  // },
   methods: {
-    ...mapActions(["getCategoryList"]), // getCategoryList(){this.$store.dispatch("getCategoryList"}
+    // ...mapActions(["getCategoryList"]), // getCategoryList(){this.$store.dispatch("getCategoryList"}
 
     showSubCategories: throttle(function(index) {
       if (this.currentIndex !== -2) {
@@ -154,10 +154,21 @@ export default {
           query.category3Id = category3id;
         }
 
-        this.$router.push({
-          name: "search",
+        const location = {
+          name:'search',
           query
-        });
+        }
+
+        // 获取当前路由地址中的params参数对象
+        const { keyword } = this.$route.params;
+        if (keyword) {
+          location.params = { keyword };
+        }
+
+        this.$router.push(location);
+
+        // 跳到搜索页后，自动隐藏列表
+        this.hideSubCategories();
       }
     }
   }

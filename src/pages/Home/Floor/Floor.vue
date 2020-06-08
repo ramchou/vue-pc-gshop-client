@@ -94,8 +94,15 @@
 </template>
 
 <script>
+import {mapState} from 'vuex'
 export default {
-  name: "Floor"
+  name: "Floor",
+  computed: {
+    ...mapState({
+      floors: state => state.home.floors      
+    })
+
+  }
 };
 </script>
 

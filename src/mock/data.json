@@ -1,0 +1,30 @@
+[
+    {
+        "id": 1,
+        "name": "agatha",
+        "age": 21,
+        "address": {},
+        "likes": ["eating", "movies"]
+    },
+    {
+        "id": 2,
+        "name": "polly",
+        "age": 11,
+        "address": {},
+        "likes": ["swimming", "movies"]
+    },
+    {
+        "id": 3,
+        "name": "steven",
+        "age": 6,
+        "address": {},
+        "likes": ["sleeping", "movies"]
+    },
+    {
+        "id": 4,
+        "name": "hahaha",
+        "age": 9,
+        "address": {},
+        "likes": ["dancing", "movies"]
+    }
+]

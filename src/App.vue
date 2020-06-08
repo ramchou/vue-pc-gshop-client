@@ -12,6 +12,7 @@
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 // import { reqCategories } from "./api";
+// import { reqFloors } from "./api";
 
 export default {
   name: "App",
@@ -19,6 +20,14 @@ export default {
   components: {
     Header,
     Footer
+  },
+  async mounted () {
+    // 分发给异步actions获取列表数据
+    this.$store.dispatch('getCategoryList')
+
+    // const result = await reqFloors()
+    // console.log(result);
+    
   }
 };
 </script>
