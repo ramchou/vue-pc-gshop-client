@@ -136,31 +136,67 @@ import SearchSelector from "./SearchSelector/SearchSelector";
 import { mapState } from "vuex";
 export default {
   name: "Search",
-
+  components: {
+    SearchSelector
+  },
   data() {
     return {
       // 用于发搜索请求的条件参数的对象
-      searchParams: {}
+      searchParams: {
+        props: [],
+        trademark: "",
+        order: "1:desc",
+        pageNo: 1,
+        pageSize: 5
+      }
     };
   },
-
-  // 发请求的位置：一般在created() 或者 mounted()中
-  created() {
-    this.getProductionList();
+  methods: {
+    // 根据query和params来更新searchParams参数
+    updateSearchParams() {
+      const {
+        categoryName,
+        category1Id,
+        category2Id,
+        category3Id
+      } = this.$route.query;
+      const { keyword } = this.$route.params;
+      this.searchParams = {
+        ...this.searchParams,
+        categoryName,
+        category1Id,
+        category2Id,
+        category3Id,
+        keyword
+      };
+    }
   },
   computed: {
     ...mapState({
       productionList: state => state.search.productionList
     })
   },
-  methods: {
-    getProductionList() {
-      this.$store.dispatch("getProductionList", this.searchParams);
-    }
+
+  // 初始同步更新data数据
+  beforeMount() {
+    this.updateSearchParams();
   },
 
-  components: {
-    SearchSelector
+  // 发请求的位置：一般在created() 或者 mounted()中
+  // created() {
+  //   this.getProductionList();
+  // },
+  // 初始异步更新data数据
+  mounted() {
+    this.$store.dispatch("getProductionList", this.searchParams);
+  },
+
+  watch: {
+    $route() {
+      // 一旦路由参数发生了变化(组件没变)，就更新searchParams参数，重新发请求
+      this.updateSearchParams();
+      this.$store.dispatch("getProductionList", this.searchParams);
+    }
   }
 };
 </script>
