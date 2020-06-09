@@ -23,11 +23,34 @@ export default {
     carouselList: Array, // 轮播的数组数据
     autoplay: Boolean
   },
+
+  mounted () {
+    // 方法二：
+    // 初始显示完之后，如果已经有数据了再去创建swiper对象，针对floor组件中的轮播
+    if(this.carouselList.length > 0){
+      this.initSwiper()
+    }
+  },
+
   watch: {
-    carouselList() {
-      this.$nextTick(() => {
-        this.initSwiper();
-      });
+    // carouselList() {
+    // 利用nextTick延迟到界面更新之后再去创建对象
+    //   this.$nextTick(() => {
+    //     this.initSwiper();
+    //   });
+    // },
+
+    carouselList: {
+      handler(value) {
+        if(this.carouselList.length === 0) return
+        // 只要监测到数据有变化就去创建swiper对象，针对listContainer中banners的轮播
+        this.$nextTick(() => {
+          this.initSwiper();
+        });
+      },
+      // 解决Floor组件的轮播
+      // 方法一：初始显示时就立即调用创建swiper对象
+      // immediate: true 
     }
   },
   methods: {
