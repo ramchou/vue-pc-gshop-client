@@ -33,6 +33,7 @@ export default {
   mounted () {
     this.$store.dispatch('getFloors')
     this.$store.dispatch('getBanners')
+    this.$store.dispatch('getRecommends')
   },
   computed: {
     ...mapState({

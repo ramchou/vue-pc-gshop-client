@@ -1,11 +1,12 @@
-import { reqCategories, reqBanners, reqFloors } from '@/api'
+import { reqCategories, reqBanners, reqFloors, reqRecommends } from '@/api'
 
 
 export default {
     state: {
         categoryList: [],
         banners: [], // 广告轮播列表数据
-        floors: []  // 楼层轮播列表数据
+        floors: [],  // 楼层轮播列表数据
+        recommends: {}  // 今日推荐
     },
     mutations: { // 当前子模块的mutations
 
@@ -22,6 +23,11 @@ export default {
         // 接收保存楼层轮播列表的mutations
         RECEIVE_FLOORS(state, floors) {
             state.floors = floors
+        },
+
+        // 今日推荐
+        RECEIVE_RECOMMENDS(state, recommends) {
+            state.recommends = recommends
         }
 
     },
@@ -53,6 +59,16 @@ export default {
             if (result.code === 200) {
                 const floors = result.data
                 commit('RECEIVE_FLOORS', floors)
+            }
+        },
+
+
+        // 今日推荐
+        async getRecommends({ commit }) {
+            const result = await reqRecommends()
+            if (result.code === 200) {
+                const recommends = result.data
+                commit('RECEIVE_RECOMMENDS', recommends)
             }
         }
 

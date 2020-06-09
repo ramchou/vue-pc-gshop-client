@@ -81,9 +81,9 @@
             <span class="service-intro">白条</span>
           </li>
         </ul>
-        <div class="ads">
+        <!-- <div class="ads">
           <img src="./images/ad1.png" />
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
