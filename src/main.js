@@ -4,9 +4,12 @@ import router from '@/router'
 import store from './store'
 import TypeNav from './components/TypeNav'
 import '@/mock/mockServer' // 引入加载，即被执行了一次
+import "swiper/css/swiper.min.css"
+import Carousel from './components/Carousel'
 
 // 注册全局组件
 Vue.component('TypeNav', TypeNav)
+Vue.component('Carousel', Carousel)
 
 Vue.config.productionTip = false
 
