@@ -24,11 +24,11 @@ export default {
     autoplay: Boolean
   },
 
-  mounted () {
+  mounted() {
     // 方法二：
     // 初始显示完之后，如果已经有数据了再去创建swiper对象，针对floor组件中的轮播
-    if(this.carouselList.length > 0){
-      this.initSwiper()
+    if (this.carouselList.length > 0) {
+      this.initSwiper();
     }
   },
 
@@ -42,15 +42,15 @@ export default {
 
     carouselList: {
       handler(value) {
-        if(this.carouselList.length === 0) return
+        if (this.carouselList.length === 0) return;
         // 只要监测到数据有变化就去创建swiper对象，针对listContainer中banners的轮播
         this.$nextTick(() => {
           this.initSwiper();
         });
-      },
-      // 解决Floor组件的轮播
+      }
+      // 解决Floor组件的轮播问题
       // 方法一：初始显示时就立即调用创建swiper对象
-      // immediate: true 
+      // immediate: true
     }
   },
   methods: {

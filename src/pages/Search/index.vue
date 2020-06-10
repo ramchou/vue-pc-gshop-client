@@ -11,32 +11,39 @@
             </li>
           </ul>
           <ul class="fl sui-tag">
-            <li class="with-x">手机</li>
-            <li class="with-x">
-              iphone
-              <i>×</i>
+            <li class="with-x" v-if="searchParams.categoryName">
+              {{searchParams.categoryName}}
+              <i @click="removeCategory">×</i>
             </li>
-            <li class="with-x">
-              华为
-              <i>×</i>
+            <li class="with-x" v-if="searchParams.keyword">
+              {{searchParams.keyword}}
+              <i @click="removeKeyword">×</i>
             </li>
-            <li class="with-x">
-              OPPO
-              <i>×</i>
+            <li class="with-x" v-if="searchParams.trademark">
+              {{searchParams.trademark}}
+              <i @click="removeTrademark">×</i>
+            </li>
+            <li class="with-x" v-for="(prop,index) in searchParams.props" :key='prop'>
+              {{prop}}
+              <i @click="removeProp(index)">×</i>
             </li>
           </ul>
         </div>
 
         <!--selector-->
-        <SearchSelector />
+        <SearchSelector :setTradeMark='setTradeMark' @addProp='addProp'/>
 
         <!--details-->
         <div class="details clearfix">
           <div class="sui-navbar">
             <div class="navbar-inner filter">
               <ul class="sui-nav">
-                <li class="active">
-                  <a href="#">综合</a>
+                <li :class="{active: isActive('1')}" @click="setOrder('1')">
+                  <a href="#">综合
+                    <i class="iconfont" v-if="isActive('1')"
+                      :class="iconClass"
+                    ></i>
+                  </a>
                 </li>
                 <li>
                   <a href="#">销量</a>
@@ -47,11 +54,12 @@
                 <li>
                   <a href="#">评价</a>
                 </li>
-                <li>
-                  <a href="#">价格⬆</a>
-                </li>
-                <li>
-                  <a href="#">价格⬇</a>
+                <li :class="{active:isActive('2')}"  @click="setOrder('2')">
+                  <a href="#">价格
+                    <i class="iconfont" v-if="isActive('2')"
+                      :class="iconClass"
+                    ></i>
+                  </a>
                 </li>
               </ul>
             </div>
@@ -92,39 +100,13 @@
               </li>
             </ul>
           </div>
-          <div class="fr page">
-            <div class="sui-pagination clearfix">
-              <ul>
-                <li class="prev disabled">
-                  <a href="#">«上一页</a>
-                </li>
-                <li class="active">
-                  <a href="#">1</a>
-                </li>
-                <li>
-                  <a href="#">2</a>
-                </li>
-                <li>
-                  <a href="#">3</a>
-                </li>
-                <li>
-                  <a href="#">4</a>
-                </li>
-                <li>
-                  <a href="#">5</a>
-                </li>
-                <li class="dotted">
-                  <span>...</span>
-                </li>
-                <li class="next">
-                  <a href="#">下一页»</a>
-                </li>
-              </ul>
-              <div>
-                <span>共10页&nbsp;</span>
-              </div>
-            </div>
-          </div>
+          <Pagination
+            :currentPage="searchParams.pageNo"
+            :pageSize="searchParams.pageSize"
+            :total="productionList.total"
+            :showPageNo="5"
+            @currentChange="getProductionList"
+          />
         </div>
       </div>
     </div>
@@ -134,6 +116,7 @@
 <script>
 import SearchSelector from "./SearchSelector/SearchSelector";
 import { mapState } from "vuex";
+import Vue from 'vue'
 export default {
   name: "Search",
   components: {
@@ -143,15 +126,106 @@ export default {
     return {
       // 用于发搜索请求的条件参数的对象
       searchParams: {
-        props: [],
-        trademark: "",
-        order: "1:desc",
-        pageNo: 1,
-        pageSize: 5
+        category1Id: "", // 一级分类ID
+        category2Id: "", // 二级分类ID
+        category3Id: "", // 三级分类ID
+        categoryName: "", // 分类名称
+        keyword: "", // 搜索关键字
+
+        props: [], // 商品属性的数组: ["属性ID:属性值:属性名"] ["2:6.0～6.24英寸:屏幕尺寸"]
+        trademark: "", // // 品牌: "ID:品牌名称" "1:苹果"
+        order: "1:desc", // 排序方式  1: 综合,2: 价格 asc: 升序,desc: 降序  "1:desc"
+
+        pageNo: 1, // 页码
+        pageSize: 5 // 每页数量
       }
     };
   },
   methods: {
+    // 设置新的排序
+    setOrder(flag){ // '1'  /  '2'
+
+      // 取出当前的orderFlag orderType
+      let [orderFlag, orderType] = this.searchParams.order.split(':')
+
+      // 点击当前排序项：切换顺序，排序项不变
+      if(flag === orderFlag){
+        orderType = orderType==='asc' ? 'desc' : 'asc'
+      }else{ // 点击非当前排序项：切换顺序，排序方式为降序
+        orderFlag = flag
+        orderType = 'desc'
+      }
+
+      // 更新order
+      this.searchParams.order = orderFlag + ':' + orderType
+      this.getProductionList()
+    },
+
+    // 判断指定的flag对应的项是否选中  ’1‘或者’2‘
+    isActive(orderFlag){
+      return this.searchParams.order.indexOf(orderFlag) === 0
+    },
+
+    // 添加新属性+发请求
+    addProp(prop){
+      if(this.searchParams.props.indexOf(prop) >= 0) return 
+      this.searchParams.props.push(prop)
+      this.getProductionList();
+    },
+    // 移除属性+发请求
+    removeProp(index){
+      this.searchParams.props.splice(index,1)
+      this.getProductionList();
+    },
+
+
+    // 设置新品牌数据+发请求
+    setTradeMark(trademark){
+      // 如果已经有了当前品牌的数据，直接结束
+      if(this.searchParams.trademark === trademark) return
+      // 否则增加品牌数据
+      // 通过点语法添加数据，不会自动更新界面
+      // this.searchParams.trademark = trademark
+      // 通过set响应式地添加新数据，会自动更新界面，不会等到数据再次返回后再更新，速度快一些
+      // Vue.set(this.searchParams, 'trademark', trademark) // 方法一：需要import Vue → Vue.set()
+      this.$set(this.searchParams, 'trademark', trademark) // 方法二：this.$set()
+
+      this.getProductionList();
+    },
+    // 移除品牌数据+发请求
+    removeTrademark(){
+      // this.searchParams.trademark = ''
+
+      // Vue.delete(this.searchParams, 'trademark')
+      this.$delete(this.searchParams, 'trademark')
+
+      this.getProductionList();
+    },
+
+
+    // 移除分类列表query数据
+    removeCategory() {
+      this.searchParams.categoryName = "";
+      this.searchParams.category1Id = "";
+      this.searchParams.category2Id = "";
+      this.searchParams.category3Id = "";
+      // this.getProductionList();
+      // 更新路由
+      // this.$router.push(this.$route.path) // 这里的path包含name和params
+      this.$router.replace(this.$route.path) // 点击回退按钮可以直接回到Home页
+    },
+    // 移除关键字params数据
+    removeKeyword() {
+      this.searchParams.keyword = ''
+      // this.getProductionList();
+      // this.$router.push({name:'search',query:this.$route.query})
+      this.$router.replace({name:'search',query:this.$route.query})
+
+      // 通知Header清除搜索框内容
+      this.$bus.$emit('removeKeyword')
+    },
+
+
     // 根据query和params来更新searchParams参数
     updateSearchParams() {
       const {
@@ -161,7 +235,10 @@ export default {
         category3Id
       } = this.$route.query;
       const { keyword } = this.$route.params;
+
+      // 更新searchParams
       this.searchParams = {
+        // 同名属性覆盖, 非同名属性保留
         ...this.searchParams,
         categoryName,
         category1Id,
@@ -169,33 +246,34 @@ export default {
         category3Id,
         keyword
       };
+    },
+
+    // 分发异步action, 请求获取数据显示
+    getProductionList(pageNo = 1) {
+      this.searchParams.pageNo = pageNo; // 更新页码数据
+      this.$store.dispatch("getProductionList", this.searchParams); 
     }
   },
   computed: {
     ...mapState({
       productionList: state => state.search.productionList
-    })
+    }),
+    iconClass(){
+      return this.searchParams.order.split(':')[1] === 'asc' ? 'iconup' :'icondown'
+    }
   },
 
-  // 初始同步更新data数据
-  beforeMount() {
-    this.updateSearchParams();
-  },
-
-  // 发请求的位置：一般在created() 或者 mounted()中
-  // created() {
-  //   this.getProductionList();
-  // },
-  // 初始异步更新data数据
-  mounted() {
-    this.$store.dispatch("getProductionList", this.searchParams);
+  // 发ajax请求的位置：一般在created() 或者 mounted()中
+  created() {
+    this.updateSearchParams(); // 根据query和params参数更新searchParams
+    this.getProductionList(); // 用最新的搜索参数发搜索请求
   },
 
   watch: {
     $route() {
-      // 一旦路由参数发生了变化(组件没变)，就更新searchParams参数，重新发请求
+      // 一旦路由参数发生了变化(组件没变)，就更新searchParams参数，并重新发请求
       this.updateSearchParams();
-      this.$store.dispatch("getProductionList", this.searchParams);
+      this.getProductionList();
     }
   }
 };

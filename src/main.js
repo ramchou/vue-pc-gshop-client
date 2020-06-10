@@ -6,14 +6,19 @@ import TypeNav from './components/TypeNav'
 import '@/mock/mockServer' // 引入加载，即被执行了一次
 import "swiper/css/swiper.min.css"
 import Carousel from './components/Carousel'
+import Pagination from './components/Pagination'
 
 // 注册全局组件
 Vue.component('TypeNav', TypeNav)
 Vue.component('Carousel', Carousel)
+Vue.component('Pagination', Pagination)
 
 Vue.config.productionTip = false
 
 new Vue({
+  beforeCreate () {
+    Vue.prototype.$bus = this
+  },
   render: h => h(App),
   router,
   store  // 注册之后，所有的组件都可以通过$store来得到store对象

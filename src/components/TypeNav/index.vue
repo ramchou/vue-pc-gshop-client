@@ -155,9 +155,9 @@ export default {
         }
 
         const location = {
-          name:'search',
+          name: "search",
           query
-        }
+        };
 
         // 获取当前路由地址中的params参数对象
         const { keyword } = this.$route.params;
@@ -165,7 +165,12 @@ export default {
           location.params = { keyword };
         }
 
-        this.$router.push(location);
+        // 如果当前在search页面，使用replace，否则使用push
+        if (this.$route.name === "search") {
+          this.$router.replace(location);
+        } else {
+          this.$router.push(location);
+        }
 
         // 跳到搜索页后，自动隐藏列表
         this.hideSubCategories();

@@ -5,9 +5,7 @@ import { reqProductionList } from '@/api'
 export default {
     state: {
         // 包含搜索到的
-        productionList: {
-
-        }
+        productionList: {}
     },
     mutations: { // 当前子模块的mutations
         RECEIVE_PRODUCTION_LIST(state, productionList) {
