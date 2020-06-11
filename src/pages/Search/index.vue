@@ -23,7 +23,7 @@
               {{searchParams.trademark}}
               <i @click="removeTrademark">×</i>
             </li>
-            <li class="with-x" v-for="(prop,index) in searchParams.props" :key='prop'>
+            <li class="with-x" v-for="(prop,index) in searchParams.props" :key="prop">
               {{prop}}
               <i @click="removeProp(index)">×</i>
             </li>
@@ -31,7 +31,7 @@
         </div>
 
         <!--selector-->
-        <SearchSelector :setTradeMark='setTradeMark' @addProp='addProp'/>
+        <SearchSelector :setTradeMark="setTradeMark" @addProp="addProp" />
 
         <!--details-->
         <div class="details clearfix">
@@ -39,10 +39,9 @@
             <div class="navbar-inner filter">
               <ul class="sui-nav">
                 <li :class="{active: isActive('1')}" @click="setOrder('1')">
-                  <a href="#">综合
-                    <i class="iconfont" v-if="isActive('1')"
-                      :class="iconClass"
-                    ></i>
+                  <a href="#">
+                    综合
+                    <i class="iconfont" v-if="isActive('1')" :class="iconClass"></i>
                   </a>
                 </li>
                 <li>
@@ -54,11 +53,10 @@
                 <li>
                   <a href="#">评价</a>
                 </li>
-                <li :class="{active:isActive('2')}"  @click="setOrder('2')">
-                  <a href="#">价格
-                    <i class="iconfont" v-if="isActive('2')"
-                      :class="iconClass"
-                    ></i>
+                <li :class="{active:isActive('2')}" @click="setOrder('2')">
+                  <a href="#">
+                    价格
+                    <i class="iconfont" v-if="isActive('2')" :class="iconClass"></i>
                   </a>
                 </li>
               </ul>
@@ -105,7 +103,7 @@
             :pageSize="searchParams.pageSize"
             :total="productionList.total"
             :showPageNo="3"
-            @currentPage="getProductionList"
+            @updateCurrentPage="getProductionList"
           />
         </div>
       </div>
@@ -116,7 +114,7 @@
 <script>
 import SearchSelector from "./SearchSelector/SearchSelector";
 import { mapState } from "vuex";
-import Vue from 'vue'
+import Vue from "vue";
 export default {
   name: "Search",
   components: {
@@ -143,65 +141,65 @@ export default {
   },
   methods: {
     // 设置新的排序
-    setOrder(flag){ // '1'  /  '2'
+    setOrder(flag) {
+      // '1'  /  '2'
 
       // 取出当前的orderFlag orderType
-      let [orderFlag, orderType] = this.searchParams.order.split(':')
+      let [orderFlag, orderType] = this.searchParams.order.split(":");
 
       // 点击当前排序项：切换顺序，排序项不变
-      if(flag === orderFlag){
-        orderType = orderType==='asc' ? 'desc' : 'asc'
-      }else{ // 点击非当前排序项：切换顺序，排序方式为降序
-        orderFlag = flag
-        orderType = 'desc'
+      if (flag === orderFlag) {
+        orderType = orderType === "asc" ? "desc" : "asc";
+      } else {
+        // 点击非当前排序项：切换顺序，排序方式为降序
+        orderFlag = flag;
+        orderType = "desc";
       }
 
       // 更新order
-      this.searchParams.order = orderFlag + ':' + orderType
-      this.getProductionList()
+      this.searchParams.order = orderFlag + ":" + orderType;
+      this.getProductionList();
     },
 
     // 判断指定的flag对应的项是否选中  ’1‘或者’2‘
-    isActive(orderFlag){
-      return this.searchParams.order.indexOf(orderFlag) === 0
+    isActive(orderFlag) {
+      return this.searchParams.order.indexOf(orderFlag) === 0;
     },
 
     // 添加新属性+发请求
-    addProp(prop){
-      if(this.searchParams.props.indexOf(prop) >= 0) return 
-      this.searchParams.props.push(prop)
+    addProp(prop) {
+      if (this.searchParams.props.indexOf(prop) >= 0) return;
+      this.searchParams.props.push(prop);
       this.getProductionList();
     },
     // 移除属性+发请求
-    removeProp(index){
-      this.searchParams.props.splice(index,1)
+    removeProp(index) {
+      this.searchParams.props.splice(index, 1);
       this.getProductionList();
     },
 
-
     // 设置新品牌数据+发请求
-    setTradeMark(trademark){
+    setTradeMark(trademark) {
       // 如果已经有了当前品牌的数据，直接结束
-      if(this.searchParams.trademark === trademark) return
+      if (this.searchParams.trademark === trademark) return;
       // 否则增加品牌数据
       // 通过点语法添加数据，不会自动更新界面
       // this.searchParams.trademark = trademark
       // 通过set响应式地添加新数据，会自动更新界面，不会等到数据再次返回后再更新，速度快一些
       // Vue.set(this.searchParams, 'trademark', trademark) // 方法一：需要import Vue → Vue.set()
-      this.$set(this.searchParams, 'trademark', trademark) // 方法二：this.$set()
+      this.$set(this.searchParams, "trademark", trademark); // 方法二：this.$set()
 
       this.getProductionList();
     },
     // 移除品牌数据+发请求
-    removeTrademark(){
+    removeTrademark() {
       // this.searchParams.trademark = ''
 
       // Vue.delete(this.searchParams, 'trademark')
-      this.$delete(this.searchParams, 'trademark')
+      this.$delete(this.searchParams, "trademark");
 
       this.getProductionList();
     },
-
 
     // 移除分类列表query数据
     removeCategory() {
@@ -212,19 +210,18 @@ export default {
       // this.getProductionList();
       // 更新路由
       // this.$router.push(this.$route.path) // 这里的path包含name和params
-      this.$router.replace(this.$route.path) // 点击回退按钮可以直接回到Home页
+      this.$router.replace(this.$route.path); // 点击回退按钮可以直接回到Home页
     },
     // 移除关键字params数据
     removeKeyword() {
-      this.searchParams.keyword = ''
+      this.searchParams.keyword = "";
       // this.getProductionList();
       // this.$router.push({name:'search',query:this.$route.query})
-      this.$router.replace({name:'search',query:this.$route.query})
+      this.$router.replace({ name: "search", query: this.$route.query });
 
       // 通知Header清除搜索框内容
-      this.$bus.$emit('removeKeyword')
+      this.$bus.$emit("removeKeyword");
     },
-
 
     // 根据query和params来更新searchParams参数
     updateSearchParams() {
@@ -251,15 +248,17 @@ export default {
     // 分发异步action, 请求获取数据显示
     getProductionList(pageNo = 1) {
       this.searchParams.pageNo = pageNo; // 更新页码数据
-      this.$store.dispatch("getProductionList", this.searchParams); 
+      this.$store.dispatch("getProductionList", this.searchParams);
     }
   },
   computed: {
     ...mapState({
       productionList: state => state.search.productionList
     }),
-    iconClass(){
-      return this.searchParams.order.split(':')[1] === 'asc' ? 'iconup' :'icondown'
+    iconClass() {
+      return this.searchParams.order.split(":")[1] === "asc"
+        ? "iconup"
+        : "icondown";
     }
   },
 

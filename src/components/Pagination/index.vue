@@ -51,14 +51,14 @@ export default {
   },
   data() {
     return {
-      // 内部自己维护的页码   将外部传入的页码作为当前组件当前页码的初始值
-      myCurrentPage: this.currentPage
+      // myCurrentPage是子组件内部维护的页码
+      myCurrentPage: this.currentPage // 将外部传入的页码作为当前组件当前页码的初始值 只在开始时执行一次
     };
   },
   watch: {
     // 监视父组件传入的当前页码
-    currentPage(value){
-      this.myCurrentPage = value
+    currentPage(value) {
+      this.myCurrentPage = value;
     }
   },
   computed: {
@@ -110,10 +110,10 @@ export default {
     //  设置新的当前页码
     setCurrentPage(page) {
       // 更新自己data中的当前页码，而不是更新接收的currentPage属性
-      if(this.myCurrentPage === page) return;
+      if (this.myCurrentPage === page) return;
       this.myCurrentPage = page;
       // 分发vue自定义事件：通知父组件，当前页码发生了改变
-      this.$emit('currentPage', page)
+      this.$emit("updateCurrentPage", page);
     }
   }
 };
