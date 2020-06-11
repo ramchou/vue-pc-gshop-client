@@ -51,7 +51,7 @@ export default {
   },
   data() {
     return {
-      // myCurrentPage是子组件内部维护的页码
+      // myCurrentPage是子组件内部自己维护的页码
       myCurrentPage: this.currentPage // 将外部传入的页码作为当前组件当前页码的初始值 只在开始时执行一次
     };
   },
