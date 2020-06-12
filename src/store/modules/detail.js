@@ -1,4 +1,4 @@
-import { reDetailInfo } from '@/api'
+import { reqDetailInfo } from '@/api'
 
 export default {
     state: {
@@ -11,7 +11,7 @@ export default {
     },
     actions: {
         async getDetailInfo({ commit }, skuId) {
-            const result = await reDetailInfo(skuId)
+            const result = await reqDetailInfo(skuId)
             if (result.code === 200) {
                 const detailInfo = result.data
                 commit('RECEIVE_DETAIL_INFO', detailInfo)

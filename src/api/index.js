@@ -32,4 +32,4 @@ export const reqRecommends = () => mockAjax('/recommends')
 export const reqProductionList = (searchParams) => ajax.post('/list', searchParams)
 
 // 获取商品详情信息
-export const reDetailInfo = (skuId) => ajax(`/item/${skuId}`)
+export const reqDetailInfo = (skuId) => ajax(`/item/${skuId}`)
