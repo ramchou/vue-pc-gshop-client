@@ -14,6 +14,15 @@ export default {
     },
     actions: {// 当前子模块的actions
         async getProductionList({ commit }, searchParams) {
+
+            // 删除searchParams中属性值为空的属性
+            searchParams = { ...searchParams } // 浅拷贝
+            Object.keys(searchParams).forEach(key => {
+                if (searchParams[key] === '' || (Array.isArray(searchParams[key]) && searchParams[key].length === 0)) {
+                    delete searchParams.key
+                }
+            })
+
             const result = await reqProductionList(searchParams)
             if (result.code === 200) {
                 const productionList = result.data

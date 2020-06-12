@@ -32,9 +32,11 @@
         </router-link>
       </h1>
       <div class="searchArea">
-        <form action="###" class="searchForm">
+        <!-- 提交表单了整个页面就会刷新,但是并不需要它刷新 → 阻止默认行为 -->
+        <form action="###" class="searchForm" @submit.prevent="search">
           <input type="text" id="autocomplete" class="input-error input-xxlarge" v-model="keyword" />
-          <button class="sui-btn btn-xlarge btn-danger" type="button" @click="search">搜索</button>
+          <!-- <button class="sui-btn btn-xlarge btn-danger"  @click.prevent="search">搜索</button> -->
+          <button class="sui-btn btn-xlarge btn-danger"  @click="search">搜索</button>
         </form>
       </div>
     </div>

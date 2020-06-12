@@ -30,5 +30,9 @@ VueRouter.prototype.replace = function (location, onComplete, onAbort) {
 
 export default new VueRouter({
     mode: 'history',
-    routes
+    routes,
+    scrollBehavior(to, from, savedPosition) { // to代表目标路由信息对象，from代表当前路由信息对象
+        // return 期望滚动到哪个位置
+        return { x: 0, y: 0 } // 跳转路由时，滚动条自动滚动到x轴和y轴的起始位置
+    }
 })

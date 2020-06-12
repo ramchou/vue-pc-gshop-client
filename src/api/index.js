@@ -30,3 +30,6 @@ export const reqRecommends = () => mockAjax('/recommends')
 // 获取商品列表
 // searchParams 包含所有需要传递的搜索参数的对象
 export const reqProductionList = (searchParams) => ajax.post('/list', searchParams)
+
+// 获取商品详情信息
+export const reDetailInfo = (skuId) => ajax(`/item/${skuId}`)
