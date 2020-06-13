@@ -13,7 +13,8 @@
         </div>
         <div class="typeList">
           <a href="###">我的订单</a>
-          <a href="###">我的购物车</a>
+          <!-- <a href="###">我的购物车</a> -->
+          <router-link to="/shopcart">我的购物车</router-link>
           <a href="###">我的尚品汇</a>
           <a href="###">尚品汇会员</a>
           <a href="###">企业采购</a>
@@ -36,7 +37,7 @@
         <form action="###" class="searchForm" @submit.prevent="search">
           <input type="text" id="autocomplete" class="input-error input-xxlarge" v-model="keyword" />
           <!-- <button class="sui-btn btn-xlarge btn-danger"  @click.prevent="search">搜索</button> -->
-          <button class="sui-btn btn-xlarge btn-danger"  @click="search">搜索</button>
+          <button class="sui-btn btn-xlarge btn-danger" @click="search">搜索</button>
         </form>
       </div>
     </div>
@@ -88,22 +89,20 @@ export default {
       // this.$router.push(location, ()=>{});
       // this.$router.push(location).catch(()=>{});
       // 解决办法二：修改Vue原型上的push和replace方法
-      
+
       // 如果当前在search页面，使用replace，否则使用push
       // if(this.$route.path.indexOf('search') === 0){ // 路径以search开头(下标为0)
-      if(this.$route.name === 'search'){
+      if (this.$route.name === "search") {
         this.$router.replace(location);
-      }else{
+      } else {
         this.$router.push(location);
       }
-
-      
     }
   },
-  mounted () {
-    this.$bus.$on('removeKeyword', () => {
-      this.keyword = ''
-    })
+  mounted() {
+    this.$bus.$on("removeKeyword", () => {
+      this.keyword = "";
+    });
   }
 };
 </script>
