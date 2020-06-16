@@ -29,7 +29,7 @@ export default {
             if (result.code === 200) {
                 const userInfo = result.data
                 commit('RECEIVE_USER_INFO', userInfo)
-                // 将userInfo存到localStorage中
+                // 将userInfo存到localStorage中  来实现自动登录
                 saveUserInfo(userInfo)
             } else {
                 throw new Error(result.message || "登陆失败了~")

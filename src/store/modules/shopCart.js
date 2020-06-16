@@ -79,13 +79,23 @@ export default {
         },
         // 删除选中商品项
         async deleteChecked({ commit, dispatch, state }) {
-            let promises = []
-            state.cartList.forEach(item => {
-                if (item.isChecked !== 0) {
-                    const promise = dispatch('deleteCartItem', item.skuId)
-                    promises.push(promise)
+            // 方法一
+            // let promises = []
+            // state.cartList.forEach(item => {
+            //     if (item.isChecked !== 0) {
+            //         const promise = dispatch('deleteCartItem', item.skuId)
+            //         promises.push(promise)
+            //     }
+            // })
+            // return Promise.all(promises)
+
+            // 方法二
+            const promises = state.cartList.reduce((pre, item) => {
+                if (item.isChecked === 1) {
+                    pre.push(dispatch('deleteCartItem', item.skuId))
                 }
-            })
+                return pre
+            }, [])
             return Promise.all(promises)
         }
 

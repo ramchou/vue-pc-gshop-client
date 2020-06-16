@@ -108,11 +108,13 @@ export default {
       }
     },
     async logout() {
-      try {
-        await this.$store.dispatch("logout");
-        this.$router.replace("/");
-      } catch (error) {
-        alert(error.message);
+      if (confirm("确定退出吗？")) {
+        try {
+          await this.$store.dispatch("logout");
+          this.$router.replace("/login");
+        } catch (error) {
+          alert(error.message);
+        }
       }
     }
   },

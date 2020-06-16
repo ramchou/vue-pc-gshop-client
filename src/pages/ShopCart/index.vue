@@ -34,13 +34,20 @@
                 input事件: 输入改变时触发
                 change事件: 失去焦点才触发
             -->
+            <!-- 
+              输入内容的3种方式：
+                键盘单字符输入    通过ctrl+c粘贴输入    通过鼠标右键粘贴输入
+              监听方式：
+                @input="validInput"  三种方式都能监听，输入非法字符不会有输入变化，粘贴时已自动去掉非法字符
+                @keyup="validInput" 不能监听鼠标右键方式，输入非法字符显示后再自动删除，粘贴时显示后再自动删除非法字符
+            -->
             <input
               autocomplete="off"
               type="text"
-              onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')"
               minnum="1"
               class="itxt"
               :value="item.skuNum"
+              @input="validInput"
               @change="changeItemNum(item, $event.target.value - item.skuNum, $event)"
             />
             <a href="javascript:void(0)" class="plus" @click="changeItemNum(item, 1)">+</a>
@@ -150,22 +157,39 @@ export default {
 
     // 删除某个商品项
     async deleteCartItem(item) {
-      try {
-        this.$delete(this.cartList, "item");
-        await this.$store.dispatch("deleteCartItem", item.skuId);
-        this.$store.dispatch("getCartList");
-      } catch (error) {
-        alert(error.message);
+      if (window.confirm(`确定删除${item.skuName}吗？`)) {
+        try {
+          await this.$store.dispatch("deleteCartItem", item.skuId);
+          this.$store.dispatch("getCartList");
+        } catch (error) {
+          alert(error.message);
+        }
       }
     },
     // 删除选中项
-    async deleteChecked(){
-      try {
-        await this.$store.dispatch("deleteChecked")
-        this.$store.dispatch("getCartList");
-      } catch (error) {
-        alert(error.message);
+    async deleteChecked() {
+      if (window.confirm(`确定删除吗？`)) {
+        try {
+          await this.$store.dispatch("deleteChecked");
+          this.$store.dispatch("getCartList");
+        } catch (error) {
+          alert(error.message);
+        }
       }
+    },
+
+    // 检查输入
+    validInput(event){
+      // 得到输入框
+      const input = event.target
+      // 将输入框中的开头的n个0 或者 n个非数字替换为空串
+      // /^0+|\D+0*/g :匹配 开头的1+个0 或者任意位置的1+个非数字及后面0+个0
+      // \D代表非数字
+      // +代表个数>=0
+      // g 全局匹配
+
+      // 粘贴测试文本  -0a011a0110  替换后变为11110
+      input.value = input.value.replace(/^0+|\D+0*/g, '')
     }
   }
 };
