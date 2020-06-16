@@ -1,0 +1,16 @@
+// 包含一些工具函数的模块
+
+import { v4 as uuidv4 } from 'uuid'
+
+
+// 得到一个用户临时ID
+// 1.从localStorage中读取，如果有则返回结果 
+export function getUserTempId() {
+    let userTempId = localStorage.getItem("USER_TEMP_ID_KEY")
+    // 2.如果没有，则使用uuid生成一个新的，保存到localStorage中并返回
+    if (!userTempId) {
+        userTempId = uuidv4()
+        localStorage.setItem('USER_TEMP_ID_KEY', userTempId)
+    }
+    return userTempId
+}

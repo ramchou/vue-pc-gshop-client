@@ -36,10 +36,10 @@ export const reqDetailInfo = (skuId) => ajax(`/item/${skuId}`)
 
 
 // 获取购物车列表
-export const reqCartList = () => ajax(`/cart/cartlist`)
+export const reqCartList = () => ajax.get('/cart/cartList')
 // 添加到购物车
 export const reqAddToCart = (skuId, skuNum) => ajax.post(`/cart/addToCart/${skuId}/${skuNum}`)
 // 切换商品选中状态  skuID:商品ID   isChecked:商品选中状态，'0'不选中，'1'选中
-export const reqCheckCartItem = (skuID, isChecked) => ajax.post(`/cart/checkCart/${skuID}/${isChecked}`)
+export const reqCheckCartItem = (skuId, isChecked) => ajax.get(`/cart/checkCart/${skuId}/${isChecked}`)
 // 删除某个商品项
 export const reqDeleteCartItem = (skuId) => ajax.post(`/cart/deleteCart/${skuId}`)

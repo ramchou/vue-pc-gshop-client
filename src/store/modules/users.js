@@ -1,6 +1,9 @@
+import { getUserTempId } from '@/utils'
+
 export default {
     state: {
-        userinfo: {}
+        userinfo: {},
+        userTempId: getUserTempId()
     },
     mutations: {
 

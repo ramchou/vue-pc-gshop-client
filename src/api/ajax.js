@@ -1,5 +1,6 @@
 import axios from 'axios'
 import NProgress from 'nprogress'
+import store from '@/store'
 
 // 1.配置通用的基础路径和超时
 // instance 是一个与axios功能类似的ajax请求函数，不是一个实例对象
@@ -15,6 +16,11 @@ const instance = axios.create({
 // axios.interceptors.request.use(config => {// 错误
 instance.interceptors.request.use(config => {// 在真正发送请求前执行
     NProgress.start()
+
+    // 5.每个请求自动携带userTempId的请求头：在请求拦截器中实现
+    config.headers['userTempId'] = store.state.users.userTempId
+
+
     return config
 })
 // 注册响应拦截器
