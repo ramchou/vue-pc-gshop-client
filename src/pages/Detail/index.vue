@@ -85,7 +85,13 @@
             <div class="cartWrap">
               <div class="controls">
                 <!-- <input autocomplete="off" class="itxt" v-model="skuNum" type="number"  oninput="if(value<1)value=1;if(value.length>2)value=value.slice(0,2)"/> -->
-                <input autocomplete="off" class="itxt" v-model="skuNum" type="number"  oninput="if(value<1)value=1;if(value.length>99)value=99"/>
+                <input
+                  autocomplete="off"
+                  class="itxt"
+                  v-model="skuNum"
+                  type="number"
+                  oninput="if(value<1)value=1;if(value.length>99)value=99"
+                />
                 <a href="javascript:" class="plus" @click="skuNum = skuNum*1 + 1">+</a>
                 <a href="javascript:" class="mins" @click="skuNum = skuNum>1 ? skuNum*1 -1 : 1">-</a>
               </div>
@@ -364,18 +370,27 @@ export default {
 
       // 如何得知请求是否成功了：
       // 方法一：发请求时传个回调过去，根据请求结果errorMsg是否有值来进行判断
-      this.$store.dispatch("addToCart", {skuId,skuNum,callback: this.callback});
+      this.$store.dispatch("addToCart", {
+        skuId,
+        skuNum,
+        callback: this.callback
+      });
 
       // 方法二：dispatch的返回值是个promise，就是actions中对应的async函数执行返回的promise
-      const promise = this.$store.dispatch("addToCart", {skuId,skuNum});
-      promise.then(() => {
-        // 将当前商品的skuInfo的JSON文本保存到sessionStorege中(也可以自定义一个对象，只放需要的信息再进行保存)
-        window.sessionStorage.setItem('SKU_INFO_KEY', JSON.stringify(this.skuInfo))
-        // 跳转路由，携带skuNum的query参数
-        this.$router.push({path:'/addcartsuccess', query:{skuNum}});
-      }).catch(error => {
-        alert(error.message)
-      })
+      const promise = this.$store.dispatch("addToCart", { skuId, skuNum });
+      promise
+        .then(() => {
+          // 将当前商品的skuInfo的JSON文本保存到sessionStorege中(也可以自定义一个对象，只放需要的信息再进行保存)
+          window.sessionStorage.setItem(
+            "SKU_INFO_KEY",
+            JSON.stringify(this.skuInfo)
+          );
+          // 跳转路由，携带skuNum的query参数
+          this.$router.push({ path: "/addcartsuccess", query: { skuNum } });
+        })
+        .catch(error => {
+          alert(error.message);
+        });
 
       // 方法三 外面的addToCart()前面要加上async
       // try {
@@ -384,7 +399,6 @@ export default {
       // } catch (error) {
       //   alert(error.message)
       // }
-
     },
     // 方法一中所使用的的callback
     // callback(errorMsg) {
@@ -394,9 +408,6 @@ export default {
     //     this.$router.push("/addcartsuccess");
     //   }
     // },
-
-
-
 
     // 商品属性的点击交互效果
     selectValue(value, valueList) {

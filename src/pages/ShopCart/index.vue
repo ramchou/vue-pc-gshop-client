@@ -28,15 +28,28 @@
             <span class="price">{{item.cartPrice}}</span>
           </li>
           <li class="cart-list-con5">
-            <a href="javascript:void(0)" class="mins">-</a>
-            <input autocomplete="off" type="text" minnum="1" class="itxt" :value="item.skuNum" />
-            <a href="javascript:void(0)" class="plus">+</a>
+            <a href="javascript:void(0)" class="mins" @click="changeItemNum(item, -1)">-</a>
+            <!-- 
+              在vue中和原生DOM中的input输入框
+                input事件: 输入改变时触发
+                change事件: 失去焦点才触发
+            -->
+            <input
+              autocomplete="off"
+              type="text"
+              onkeyup="value=value.replace(/^(0+)|[^\d]+/g,'')"
+              minnum="1"
+              class="itxt"
+              :value="item.skuNum"
+              @change="changeItemNum(item, $event.target.value - item.skuNum, $event)"
+            />
+            <a href="javascript:void(0)" class="plus" @click="changeItemNum(item, 1)">+</a>
           </li>
           <li class="cart-list-con6">
             <span class="sum">{{item.cartPrice * item.skuNum}}</span>
           </li>
           <li class="cart-list-con7">
-            <a href="#none" class="sindelet">删除</a>
+            <a href="#none" class="sindelet" @click="deleteCartItem(item)">删除</a>
             <br />
             <a href="#none">移到收藏</a>
           </li>
@@ -49,7 +62,7 @@
         <span>全选</span>
       </div>
       <div class="option">
-        <a href="#none">删除选中的商品</a>
+        <a href="#none" @click="deleteChecked()">删除选中的商品</a>
         <a href="#none">移到我的关注</a>
         <a href="#none">清除下柜商品</a>
       </div>
@@ -112,8 +125,48 @@ export default {
       }
     },
 
-    //
-    checkAllCartItems() {}
+    // 修改商品数量  最终的数量必须大于0 , 否则让其为原来的值
+    async changeItemNum(item, numChange, event) {
+      // 计算最终的目标数量, 只有大于0才去发请求
+      const num = item.skuNum + numChange;
+
+      if (num > 0) {
+        const skuId = item.skuId;
+        const skuNum = numChange;
+        try {
+          await this.$store.dispatch("addToCart", { skuId, skuNum });
+          // 如果成功了, 重新获取购物车数据显示
+          this.$store.dispatch("getCartList");
+        } catch (error) {
+          alert(error.message);
+        }
+      } else {
+        if (event) {
+          // 否则, 置为原本的值 (手动输入了一个小于等于0的值或者输入了一个非数字)
+          event.target.value = item.skuNum;
+        }
+      }
+    },
+
+    // 删除某个商品项
+    async deleteCartItem(item) {
+      try {
+        this.$delete(this.cartList, "item");
+        await this.$store.dispatch("deleteCartItem", item.skuId);
+        this.$store.dispatch("getCartList");
+      } catch (error) {
+        alert(error.message);
+      }
+    },
+    // 删除选中项
+    async deleteChecked(){
+      try {
+        await this.$store.dispatch("deleteChecked")
+        this.$store.dispatch("getCartList");
+      } catch (error) {
+        alert(error.message);
+      }
+    }
   }
 };
 </script>

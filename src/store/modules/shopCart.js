@@ -42,7 +42,7 @@ export default {
             const result = await reqCheckCartItem(skuId, isChecked)
             if (result.code !== 200) {
                 throw new Error(result.message || "勾选失败了~")
-            } 
+            }
         },
 
         // 全选按钮的设置  是否被勾选→checked为布尔值
@@ -50,15 +50,15 @@ export default {
         // 2.针对每个需要发请求的item商品项去触发checkCartItem调用  dispatch
         // 3.content对象中包含dispatch方法
         // 4.Promise.all
-        async checkAllCartItems({ commit, dispatch, state }, checked) { 
+        async checkAllCartItems({ commit, dispatch, state }, checked) {
             // 确定全选按钮的状态
             const isChecked = checked ? '1' : '0'
-            
+
             let promises = []
             // 遍历每个商品项
-            state.cartList.forEach(item => { 
+            state.cartList.forEach(item => {
                 // 判断商品项的状态是否与全选按钮一致  不一致则发请求
-                if (item.isChecked !== isChecked * 1) { 
+                if (item.isChecked !== isChecked * 1) {
                     // 分发给checkCartItem，保存其返回的promise对象
                     const promise = dispatch('checkCartItem', { skuId: item.skuId, isChecked })
                     // 保存到数组中
@@ -67,6 +67,25 @@ export default {
             })
             // 此时请求已经发出去了
             // 返回一个promise对象
+            return Promise.all(promises)
+        },
+
+        // 删除某个商品项
+        async deleteCartItem({ commit }, skuId) {
+            const result = await reqDeleteCartItem(skuId)
+            if (result.code !== 200) {
+                throw new Error(result.message || "删除失败了~")
+            }
+        },
+        // 删除选中商品项
+        async deleteChecked({ commit, dispatch, state }) {
+            let promises = []
+            state.cartList.forEach(item => {
+                if (item.isChecked !== 0) {
+                    const promise = dispatch('deleteCartItem', item.skuId)
+                    promises.push(promise)
+                }
+            })
             return Promise.all(promises)
         }
 
@@ -86,7 +105,7 @@ export default {
         // 是否全部选中
         isAllChecked(state) {
             // every()  如果每个都被选中了才返回true
-            return state.cartList.length > 0 && state.cartList.every((item, index) => item.isChecked === 1)
+            return state.cartList.length > 0 && state.cartList.every(item => item.isChecked === 1)
         }
 
     }

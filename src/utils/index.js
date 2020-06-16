@@ -14,3 +14,17 @@ export function getUserTempId() {
     }
     return userTempId
 }
+
+
+// 保存用户信息到localStorage中
+export function saveUserInfo(userInfo) {
+    localStorage.setItem('USER_INFO_KEY', JSON.stringify(userInfo))
+}
+// 读取localStorage中保存的用户信息 返回userInfo对象或者空对象
+export function getUserInfo() {
+    return JSON.parse(localStorage.getItem('USER_INFO_KEY')) || {}
+}
+//删除localStorage中保存的用户信息
+export function removeUserInfo() {
+    localStorage.removeItem('USER_INFO_KEY')
+}

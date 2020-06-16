@@ -17,6 +17,12 @@ export function reqLogin(mobile, password) {
     // 将ajax当对象使用
     return ajax.post('/user/passport/login', { mobile, password })
 }
+// 注册
+// userInfo包括：mobile  password  code
+export const reqRegister = () => ajax.post('/user/passport/register', userInfo)
+// 退出登录
+export const reqLogout = () => ajax.get('/user/passport/logout')
+
 
 
 // 定义首页三级分类
@@ -42,4 +48,4 @@ export const reqAddToCart = (skuId, skuNum) => ajax.post(`/cart/addToCart/${skuI
 // 切换商品选中状态  skuID:商品ID   isChecked:商品选中状态，'0'不选中，'1'选中
 export const reqCheckCartItem = (skuId, isChecked) => ajax.get(`/cart/checkCart/${skuId}/${isChecked}`)
 // 删除某个商品项
-export const reqDeleteCartItem = (skuId) => ajax.post(`/cart/deleteCart/${skuId}`)
+export const reqDeleteCartItem = (skuId) => ajax.delete(`/cart/deleteCart/${skuId}`)
