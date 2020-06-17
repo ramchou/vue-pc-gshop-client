@@ -17,8 +17,14 @@ const instance = axios.create({
 instance.interceptors.request.use(config => {// 在真正发送请求前执行
     NProgress.start()
 
-    // 5.每个请求自动携带userTempId的请求头：在请求拦截器中实现
+    // 5.每个请求的的请求头自动携带userTempId：在请求拦截器中实现
     config.headers['userTempId'] = store.state.users.userTempId
+
+    // 6.登录后每个请求的请求头自动携带token：在请求拦截器中实现
+    const token = store.state.users.userInfo.token
+    if (token) {
+        config.headers['token'] = token
+    }
 
 
     return config

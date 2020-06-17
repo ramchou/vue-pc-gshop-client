@@ -17,14 +17,30 @@
             <form action="##" @submit.prevent>
               <div class="input-text clearFix">
                 <i></i>
-                <input type="text" placeholder="手机号" v-model="mobile" />
+                <input
+                  type="text"
+                  placeholder="手机号"
+                  v-model="mobile"
+                  v-validate="{required: true,regex: /^1\d{10}$/}"
+                  name="phone"
+                  :class="{invalid: errors.has('phone')}"
+                />
                 <!-- <span class="error-msg">错误提示信息</span> -->
+                <span class="error-msg">{{ errors.first('phone') }}</span>
               </div>
 
               <div class="input-text clearFix">
                 <i class="pwd"></i>
-                <input type="password" placeholder="请输入密码" v-model="password" />
+                <input
+                  type="password"
+                  placeholder="请输入密码"
+                  v-model="password"
+                  v-validate="{required: true,min:6, max:10}"
+                  name="密码"
+                  :class="{invalid: errors.has('密码')}"
+                />
                 <!-- <span class="error-msg">错误提示信息</span> -->
+                <span class="error-msg">{{ errors.first('密码') }}</span>
               </div>
 
               <div class="setting clearFix">
@@ -76,6 +92,7 @@
 </template>
 
 <script>
+import store from "@/store";
 export default {
   name: "Login",
   data() {
@@ -86,21 +103,46 @@ export default {
   },
   methods: {
     async login() {
-      // 取出收集的数据
-      const { mobile, password } = this;
-
       // 对输入数据进行前台表单验证，如果不通过则显示提示信息并结束进程
-
-      try {
-        // 分发注册的异步action
-        await this.$store.dispatch("login", { mobile, password });
-        // 如果成功了，跳转到首页
-        this.$router.replace('/')
-      } catch (error) {
-        // 如果失败了，提示失败信息
-        alert(error.message)
+      const success = await this.$validator.validateAll();
+      if (success) {
+        // 取出收集的数据
+        const { mobile, password } = this;
+        try {
+          // 分发注册的异步action
+          await this.$store.dispatch("login", { mobile, password });
+          // 如果成功了，跳转到首页
+          this.$router.replace("/");
+        } catch (error) {
+          // 如果失败了，提示失败信息
+          alert(error.message);
+        }
       }
     }
+  },
+
+  // 进入当前组件前调用，此时组件对象还未创建
+  beforeRouteEnter(to, from, next) {
+    // 在渲染该组件的对应路由被 confirm 前调用
+    // 不！能！获取组件实例 `this`，因为当守卫执行前，组件实例还没被创建
+    const token = store.state.users.userInfo.token;
+    if (token) {
+      // 如果已经登录，强制跳转到首页
+      next("/");
+    } else {
+      next();
+    }
+
+    // 如果要使用this
+    // next(vm => {
+    //   // vm就是当前组件对象，此回调函数会在组件对象创建后调用且传入的是组件对象
+    //   const token = vm.$store.state.users.userInfo.token;
+    //   if (token) {
+    //     next("/");
+    //   } else {
+    //     next();
+    //   }
+    // });
   }
 };
 </script>

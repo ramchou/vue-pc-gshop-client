@@ -7,6 +7,14 @@ import '@/mock/mockServer' // 引入加载，即被执行了一次
 import "swiper/css/swiper.min.css"
 import Carousel from './components/Carousel'
 import Pagination from './components/Pagination'
+import "./validate" // 引入表单校验的配置模块
+
+
+// 引入api模块中的所有分别暴露的函数，封装到API对象中
+import * as API from '@/api'
+// 将API对象保存到Vue的原型对象上，让所有的组件都直接可见（不用再引入API）
+Vue.prototype.$API = API
+
 
 // 注册全局组件
 Vue.component('TypeNav', TypeNav)
@@ -16,7 +24,7 @@ Vue.component('Pagination', Pagination)
 Vue.config.productionTip = false
 
 new Vue({
-  beforeCreate () {
+  beforeCreate() {
     Vue.prototype.$bus = this
   },
   render: h => h(App),

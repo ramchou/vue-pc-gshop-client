@@ -20,7 +20,7 @@ export default {
         async register({ commit }, userInfo) {
             const result = await reqRegister(userInfo)
             if (result.code !== 200) {
-                throw new Error(result.message || "注册失败了~")
+                throw new Error(result.data || "注册失败了~")
             }
         },
         // 登陆 需要更新state&并将userInfo保存到localStorage

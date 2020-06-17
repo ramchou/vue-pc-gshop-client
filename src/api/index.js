@@ -19,9 +19,9 @@ export function reqLogin(mobile, password) {
 }
 // 注册
 // userInfo包括：mobile  password  code
-export const reqRegister = () => ajax.post('/user/passport/register', userInfo)
+export const reqRegister = (userInfo) => ajax.post('/user/passport/register', userInfo)
 // 退出登录
-export const reqLogout = () => ajax.get('/user/passport/logout')
+export const reqLogout = () => ajax('/user/passport/logout')
 
 
 
@@ -49,3 +49,8 @@ export const reqAddToCart = (skuId, skuNum) => ajax.post(`/cart/addToCart/${skuI
 export const reqCheckCartItem = (skuId, isChecked) => ajax.get(`/cart/checkCart/${skuId}/${isChecked}`)
 // 删除某个商品项
 export const reqDeleteCartItem = (skuId) => ajax.delete(`/cart/deleteCart/${skuId}`)
+
+
+// 获取订单列表
+// page,limit → pageNo, pageSize
+export const reqOrders = (page, limit) => ajax(`/order/auth/${page}/${limit}`)
