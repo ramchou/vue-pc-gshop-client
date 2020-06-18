@@ -150,7 +150,7 @@ export default {
         const result = await this.$API.reqSubmitOrder(tradeNo, orderInfo);
         // 如果成功，取出订单id、跳转到支付页面
         const orderId = result.data;
-        // this.$router.replace("/pay?orderId=" + orderId);
+        // this.$router.push("/pay?orderId=" + orderId);
         this.$router.push({
           path: "/pay",
           query: { orderId }
