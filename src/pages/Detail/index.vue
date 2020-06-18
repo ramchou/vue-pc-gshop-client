@@ -370,11 +370,11 @@ export default {
 
       // 如何得知请求是否成功了：
       // 方法一：发请求时传个回调过去，根据请求结果errorMsg是否有值来进行判断
-      this.$store.dispatch("addToCart", {
-        skuId,
-        skuNum,
-        callback: this.callback
-      });
+      // this.$store.dispatch("addToCart", {
+      //   skuId,
+      //   skuNum,
+      //   callback: this.callback
+      // });
 
       // 方法二：dispatch的返回值是个promise，就是actions中对应的async函数执行返回的promise
       const promise = this.$store.dispatch("addToCart", { skuId, skuNum });

@@ -111,8 +111,14 @@ export default {
         try {
           // 分发注册的异步action
           await this.$store.dispatch("login", { mobile, password });
-          // 如果成功了，跳转到首页
-          this.$router.replace("/");
+          // 如果成功了
+          // 如果redirect有值，则跳转去redirect页面
+          const redirect = this.$route.query.redirect;
+          if (redirect) {
+            this.$router.replace(redirect);
+          } else {
+            this.$router.replace("/");
+          }
         } catch (error) {
           // 如果失败了，提示失败信息
           alert(error.message);

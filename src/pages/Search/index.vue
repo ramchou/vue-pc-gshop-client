@@ -78,9 +78,7 @@
                     </strong>
                   </div>
                   <div class="attr">
-                    <router-link :to="`/detail/${item.id}`">
-                      {{item.title}}
-                    </router-link>
+                    <router-link :to="`/detail/${item.id}`">{{item.title}}</router-link>
                   </div>
                   <div class="commit">
                     <i class="command">
@@ -93,6 +91,7 @@
                       href="success-cart.html"
                       target="_blank"
                       class="sui-btn btn-bordered btn-danger"
+                      @click="addToCart(item)"
                     >加入购物车</a>
                     <a href="javascript:void(0);" class="sui-btn btn-bordered">收藏</a>
                   </div>
@@ -142,6 +141,25 @@ export default {
     };
   },
   methods: {
+    // 点击加入购物车
+    async addToCart(item) {
+      try {
+        await this.$store.dispatch("addToCart", { skuId: item.id, skuNum: 1 });
+        const skuInfo = {
+          skuDefaultImg: item.defaultImg,
+          skuName: item.title,
+          id: item.id
+        };
+        sessionStorage.setItem("SKU_INFO_KEY", JSON.stringify(skuInfo));
+        this.$router.push({
+          path: "/addcartsuccess",
+          query: { skuNum: 1 }
+        });
+      } catch (error) {
+        alert(error.message);
+      }
+    },
+
     // 设置新的排序
     setOrder(flag) {
       // '1'  /  '2'

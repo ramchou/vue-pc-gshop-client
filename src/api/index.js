@@ -54,3 +54,23 @@ export const reqDeleteCartItem = (skuId) => ajax.delete(`/cart/deleteCart/${skuI
 // 获取订单列表
 // page,limit → pageNo, pageSize
 export const reqOrders = (page, limit) => ajax(`/order/auth/${page}/${limit}`)
+
+
+// 获取交易信息
+export const reqTradeInfo = () => ajax('/order/auth/trade')
+
+// 提交订单
+// tradeNo  交易号(不等于订单号)
+// orderInfo  包含要提交的订单相关信息的对象
+export const reqSubmitOrder = (tradeNo, orderInfo) => ajax({
+    url: '/order/auth/submitOrder',
+    method: 'POST',
+    params: { tradeNo }, // 指定query参数
+    data: orderInfo
+})
+
+// 获取订单支付信息
+export const reqPayInfo = (orderId) => ajax(`/payment/weixin/createNative/${orderId}`)
+
+// 查询支付订单状态
+export const reqPayStatus = (orderId) => ajax(`/payment/weixin/queryPayStatus/${orderId}`)

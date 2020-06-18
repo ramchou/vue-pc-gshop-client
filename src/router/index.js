@@ -63,13 +63,12 @@ router.beforeEach((to, from, next) => { // 监视的回调函数
         if (token) {
             next()
         } else {        
-            // 如果未登录，强制跳转到login页面
-            next('/login')
+            // 如果未登录，强制跳转到login页面，携带上目标路径的redirect query路径
+            next('/login?redirect='+targetPath)
         }
     } else {
         // 如果不需要登录检查，直接放行
         next()
     }
-
 })
 export default router
