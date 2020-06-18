@@ -72,13 +72,25 @@
         </tbody>
       </table>
     </div>
-    <Pagination
+    <!-- <Pagination
       :currentPage="page"
       :pageSize="limit"
       :total="total"
       :showPageNo="5"
       @updateCurrentPage="getOrders"
-    />
+    /> -->
+    <el-pagination
+      background
+      layout="prev, pager, next, ->,total"
+      prev-text='上一页'
+      next-text='下一页'
+      :page-size="limit"
+      :total="total"
+      :current-page='page'
+      :pager-count="9"
+      @current-change="getOrders"
+      >
+    </el-pagination>
   </div>
 </template>
 

@@ -8,6 +8,7 @@ import "swiper/css/swiper.min.css"
 import Carousel from './components/Carousel'
 import Pagination from './components/Pagination'
 import "./validate" // 引入表单校验的配置模块
+import './elements' // 引入elements模块
 
 
 // 引入api模块中的所有分别暴露的函数，封装到API对象中

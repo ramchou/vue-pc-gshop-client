@@ -88,8 +88,7 @@
                   </div>
                   <div class="operate">
                     <a
-                      href="success-cart.html"
-                      target="_blank"
+                      href="###"
                       class="sui-btn btn-bordered btn-danger"
                       @click="addToCart(item)"
                     >加入购物车</a>
