@@ -10,6 +10,13 @@ import Pagination from './components/Pagination'
 import "./validate" // 引入表单校验的配置模块
 import './elements' // 引入elements模块
 
+import VueLazyLoad from 'vue-lazyload'
+import loading from '@/assets/images/loading.jpg'
+// 配置图片懒加载
+Vue.use(VueLazyLoad, {
+  loading
+})
+
 
 // 引入api模块中的所有分别暴露的函数，封装到API对象中
 import * as API from '@/api'

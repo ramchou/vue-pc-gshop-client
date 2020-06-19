@@ -112,8 +112,8 @@ export default {
           // 分发注册的异步action
           await this.$store.dispatch("login", { mobile, password });
           // 如果成功了
-          // 如果redirect有值，则跳转去redirect页面
           const redirect = this.$route.query.redirect;
+          // 如果redirect有值，则跳转去redirect页面
           if (redirect) {
             this.$router.replace(redirect);
           } else {

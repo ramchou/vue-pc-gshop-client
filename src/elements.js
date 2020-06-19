@@ -1,9 +1,9 @@
 // element-ui的组件注册
 
 import Vue from 'vue'
-import { Pagination, MessageBox, Message } from 'element-ui';
+import { Pagination, MessageBox, Message, Button } from 'element-ui';
 
-// Vue.component(Button.name, Button); //  Button.name→ el-button
+Vue.component(Button.name, Button); //  Button.name→ el-button
 // Vue.component(Select.name, Select); //  Select.name→ el-select
 /* 或写为
  * Vue.use(Button)

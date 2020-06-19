@@ -1,8 +1,16 @@
-import Home from '../pages/Home'
-import Search from '../pages/Search'
+// import Home from '../pages/Home'
+// import Search from '../pages/Search'
+// import Detail from '../pages/Detail'
+
+// 1.import引入的模块会被拆分出去、单独打包，当访问该路由时才会加载该组件、生成xx.js
+// 2.配置的路由组件是一个返回import()的动态打包模块函数，函数只有在请求对应的路径时才会执行，从而请求加载（只有第一次）对应的打包文件
+const Home = () => import('../pages/Home')
+const Search = () => import('../pages/Search')
+const Detail = () => import('../pages/Detail')
+
+
 import Register from '../pages/Register'
 import Login from '../pages/Login'
-import Detail from '../pages/Detail'
 import AddCartSuccess from '../pages/AddCartSuccess'
 import ShopCart from '../pages/ShopCart'
 
@@ -133,6 +141,58 @@ export default [
                 redirect: '/center/myorder'
             }
         ]
-    }
+    },
 
+
+
+
+    {
+        path: '/communication',
+        component: () => import('@/pages/Communication/Communication'),
+        children: [
+            {
+                path: 'event',
+                component: () => import('@/pages/Communication/EventTest/EventTest'),
+                meta: {
+                    isHideFooter: true
+                },
+            },
+            {
+                path: 'model',
+                component: () => import('@/pages/Communication/ModelTest/ModelTest'),
+                meta: {
+                    isHideFooter: true
+                },
+            },
+            {
+                path: 'sync',
+                component: () => import('@/pages/Communication/SyncTest/SyncTest'),
+                meta: {
+                    isHideFooter: true
+                },
+            },
+            {
+                path: 'attrs-listeners',
+                component: () => import('@/pages/Communication/AttrsListenersTest/AttrsListenersTest'),
+                meta: {
+                    isHideFooter: true
+                },
+            },
+            {
+                path: 'children-parent',
+                component: () => import('@/pages/Communication/ChildrenParentTest/ChildrenParentTest'),
+                meta: {
+                    isHideFooter: true
+                },
+            },
+            {
+                path: 'scope-slot',
+                component: () => import('@/pages/Communication/ScopeSlotTest/ScopeSlotTest'),
+                meta: {
+                    isHideFooter: true
+                },
+            }
+        ],
+    },
 ]
+
